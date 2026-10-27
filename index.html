@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GetHub V3.0 – Offline GitHub & Git Repository Browser for Windows</title>
+<meta name="description" content="GetHub is a fast, native Windows desktop app for downloading and browsing GitHub repositories completely offline. Features full GitHub-fidelity views, interactive file tree, syntax highlighting, Markdown README rendering, visual commit history graph, and built-in diff viewer.">
+<link rel="icon" type="image/png" href="GetHub.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="prog" aria-hidden="true"></div>
+
+<header class="top"><div class="wrap">
+ <a class="brand" href="#top"><img src="GetHub.png" alt="GetHub logo"><span><b>Get</b>Hub</span><span class="vtag">v3.0</span></a>
+ <div class="hr">
+  <nav aria-label="Main navigation">
+   <a href="#showcase">Interface</a>
+   <a href="#features">Features</a>
+   <a href="#architecture">Architecture</a>
+   <a href="#compare">Compare</a>
+   <a href="#start">Get started</a>
+   <a href="#faq">FAQ</a>
+  </nav>
+  <a class="nav-dl" href="GetHub.exe" download="GetHub.exe" title="Download GetHub.exe for Windows">
+   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg>
+   Download
+  </a>
+  <button id="theme" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">
+   <svg class="moon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+   <svg class="sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4l1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4l1.4-1.4"/></svg>
+  </button>
+ </div>
+</div></header>
+
+<main id="top">
+<!-- Hero Section -->
+<div class="wrap hero">
+ <div>
+  <h1>Browse GitHub repositories <span class="rot" id="rot">offline</span></h1>
+  <p class="lead-hero">GetHub is a fast, native Windows desktop client designed to download and browse GitHub repositories offline with 100% visual fidelity — code, branches, visual commit graph, diffs, and formatted READMEs.</p>
+  <div class="btns">
+   <a class="btn p" href="GetHub.exe" download="GetHub.exe">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg>
+    Download GetHub.exe
+   </a>
+   <a class="btn s" href="#showcase">View Interface</a>
+   <a class="btn s" href="#architecture">Tech Specs</a>
+  </div>
+  <div class="badges">
+   <span class="badge"><span class="badge-dot"></span> Windows 10 &amp; 11</span>
+   <span class="badge">.NET Framework 4.8</span>
+   <span class="badge">Native C# (No Electron)</span>
+   <span class="badge">100% Offline</span>
+   <span class="badge">Commit Graph &amp; Diff</span>
+  </div>
+  <p class="hint">Test the interactive preview: switch files, change branches, or inspect the Diff tab.</p>
+ </div>
+
+ <div class="app" id="app">
+  <div class="bar"><i></i><i></i><i></i><span>GetHub — Abdelwahab-Ayman / GetHub</span>
+   <label class="br">Branch <select id="branch" aria-label="Branch"><option>main</option><option>dev</option><option>v3.0</option></select></label>
+  </div>
+  <div class="pane">
+   <div class="tree">
+    <input id="q" type="search" placeholder="Search files…" aria-label="Search files in repository">
+    <div id="tree" role="list"></div>
+   </div>
+   <div class="view">
+    <div class="tabs" role="tablist" aria-label="View mode">
+     <button role="tab" aria-selected="true" data-v="code">Code</button>
+     <button role="tab" aria-selected="false" data-v="log">Commits</button>
+     <button role="tab" aria-selected="false" data-v="diff">Diff</button>
+    </div>
+    <div id="out" class="out" aria-live="polite"></div>
+   </div>
+  </div>
+  <div class="status" id="status"></div>
+ </div>
+</div>
+
+<!-- Screenshot Showcase Section -->
+<section id="showcase"><div class="wrap rv">
+ <h2>Authentic GitHub Experience, Right on Your Desktop</h2>
+ <p class="lead">Engineered from the ground up to reproduce the GitHub web experience inside a snappy, lightweight Windows application that never depends on a connection.</p>
+
+ <div class="showcase-card">
+  <div class="showcase-header">
+   <span><i></i> GetHub V3.0 Desktop Client</span>
+   <span>Native C# WinForms UI</span>
+  </div>
+  <div class="showcase-img-wrap" id="zoomTrigger" title="Click to view full resolution (2752x1536)">
+   <img src="UI_design.jpg" alt="GetHub UI Design - Offline GitHub Browser Interface" loading="lazy">
+   <div class="showcase-overlay">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg>
+    Click to zoom high-resolution
+   </div>
+  </div>
+ </div>
+
+ <div class="showcase-grid">
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h7"/></svg> Repository Library</h4>
+   <p>Quick-switch sidebar showing your offline repositories with language tags, stars, fork counts, and last sync timestamps. Filter instantly with Ctrl+F.</p>
+  </div>
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> GitHub-Style Section Tabs</h4>
+   <p>Explore Code, History, Issues, Pull Requests, Actions, Projects, Wiki, and Insights. Tabs adapt dynamically without text truncation across window sizes.</p>
+  </div>
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Syntax-Highlighted Viewer</h4>
+   <p>High-performance code reader with line numbers, monospace alignment, and full GitHub-Flavored Markdown README parsing with tables and local image resolution.</p>
+  </div>
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 9v12"/></svg> Interactive Commit Graph</h4>
+   <p>Custom-painted GDI+ commit graph visualizing branch lanes, merge commits, commit SHAs, author dates, and commit message details with zero lag.</p>
+  </div>
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Built-in Diff Engine</h4>
+   <p>Review side-by-side and hunk diffs with color-coded additions, deletions, and gutter line numbers. Inspect exactly what changed in any commit.</p>
+  </div>
+  <div class="showcase-item">
+   <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> About &amp; Release Sidebar</h4>
+   <p>Right-hand column highlighting project description, website links, topic chips, release version history, and contributors with cached avatars.</p>
+  </div>
+ </div>
+</div></section>
+
+<!-- Features Section -->
+<section id="features"><div class="wrap rv">
+ <h2>Everything you need to read repositories anywhere</h2>
+ <p class="lead">Built for developers, students, researchers, and systems administrators who need fast, uninterrupted access to source code.</p>
+
+ <div class="ft">
+  <div class="fl" role="tablist" aria-label="Features" aria-orientation="vertical">
+   <button role="tab" aria-selected="true" aria-controls="p0">1. One-Click Downloader</button>
+   <button role="tab" aria-selected="false" aria-controls="p1">2. Code &amp; Markdown Engine</button>
+   <button role="tab" aria-selected="false" aria-controls="p2">3. Git Graph &amp; Diff Viewer</button>
+   <button role="tab" aria-selected="false" aria-controls="p3">4. Metadata &amp; Releases</button>
+   <button role="tab" aria-selected="false" aria-controls="p4">5. Local Git &amp; Drag-and-Drop</button>
+   <button role="tab" aria-selected="false" aria-controls="p5">6. Native Windows Speed</button>
+  </div>
+
+  <div class="fp">
+   <div role="tabpanel" id="p0">
+    <h3>One-Click Downloader &amp; Smart Cache</h3>
+    <p>Fetch any public repository or private repository (via GitHub Personal Access Token) directly by entering its URL or <code>owner/repo</code> shorthand. GetHub streams the archive and unpacks it into your local storage with an intelligent segment-budgeting algorithm that completely overcomes Windows 260-character MAX_PATH limitations.</p>
+    <table>
+     <tr><th>Supports</th><td>Public repos, private repos (PAT), custom branches &amp; tags</td></tr>
+     <tr><th>Storage</th><td><code>%LocalAppData%\GetHub\repos\&lt;owner&gt;\&lt;repo&gt;</code></td></tr>
+     <tr><th>Sync</th><td>One-click update button keeps your offline snapshot synchronized</td></tr>
+    </table>
+   </div>
+
+   <div role="tabpanel" id="p1" hidden>
+    <h3>Code &amp; Markdown Rendering Engine</h3>
+    <p>Read code files with custom syntax highlighting across C#, JavaScript, TypeScript, Python, HTML, CSS, Go, Rust, Java, XML, JSON, and Shell. Read formatted READMEs through a specialized GitHub Flavored Markdown (GFM) renderer supporting headings, tables, task lists, code blocks, blockquotes, and automatic local image path resolution.</p>
+    <table>
+     <tr><th>Syntax</th><td>Multi-language tokenizer with line numbers &amp; clean indentation</td></tr>
+     <tr><th>Markdown</th><td>GFM tables, checkboxes, blockquotes, code blocks, image resolution</td></tr>
+     <tr><th>Security</th><td>Embedded <code>HtmlSanitizer</code> prevents malicious script execution</td></tr>
+    </table>
+   </div>
+
+   <div role="tabpanel" id="p2" hidden>
+    <h3>Visual Commit Graph &amp; Hunk Diff Engine</h3>
+    <p>Follow the full Git history commit by commit. The custom GDI+ commit graph paints branching lanes, merge nodes, author cards, commit hashes, and commit messages. Select any commit to see files modified, additions, deletions, and an interactive side-by-side or hunk diff view with color-coded syntax.</p>
+    <table>
+     <tr><th>Commit Graph</th><td>Interactive visual branching lanes, commit nodes, author &amp; dates</td></tr>
+     <tr><th>Diff Viewer</th><td>Color-coded line-by-line diffs with additions, deletions &amp; gutters</td></tr>
+     <tr><th>Commit Files</th><td>Added, modified, deleted, and renamed file status badges</td></tr>
+    </table>
+   </div>
+
+   <div role="tabpanel" id="p3" hidden>
+    <h3>Repository Metadata, Releases &amp; Contributors</h3>
+    <p>The right-hand About panel replicates GitHub's sidebar: repository description, homepage link, categorized topic chips, stars, forks, watchers, open issues count, and license type. It also tracks the repository release timeline with downloadable asset links and lists contributors with avatars.</p>
+    <table>
+     <tr><th>Repository Details</th><td>Description, homepage, topics, license, open issues count</td></tr>
+     <tr><th>Releases</th><td>Release versions, published timestamps, and direct asset links</td></tr>
+     <tr><th>Contributors</th><td>Contributor roster with GitHub avatar badges and commit tallies</td></tr>
+    </table>
+   </div>
+
+   <div role="tabpanel" id="p4" hidden>
+    <h3>Local Git Clones &amp; Drag-and-Drop</h3>
+    <p>GetHub isn't just for downloading — you can drag and drop any local folder containing a <code>.git</code> directory straight from Windows Explorer into GetHub. GetHub uses an ultra-fast local Git history reader that parses commits, branches, and diffs directly from your disk, allowing you to browse repos from GitLab, Bitbucket, or local servers offline.</p>
+    <table>
+     <tr><th>Drag &amp; Drop</th><td>Drop local git folders or repository URLs directly into the app</td></tr>
+     <tr><th>Local Git Engine</th><td>Reads native <code>git log</code> and diffs with high-performance parsing</td></tr>
+     <tr><th>Any Git Source</th><td>Works seamlessly with GitHub, GitLab, Bitbucket, or self-hosted</td></tr>
+    </table>
+   </div>
+
+   <div role="tabpanel" id="p5" hidden>
+    <h3>Native Performance &amp; Total Privacy</h3>
+    <p>Built with pure C# and .NET Framework 4.8 WinForms with custom double-buffered GDI+ controls. GetHub launches in under half a second and consumes around 40 MB of RAM (compared to 400 MB+ for Electron-based apps). Your code never leaves your computer, and no telemetry or tracking is collected.</p>
+    <table>
+     <tr><th>Memory &amp; CPU</th><td>Lightweight (~40 MB RAM), zero runtime bloat, instant startup</td></tr>
+     <tr><th>Themes</th><td>High-contrast Dark and Light modes tailored to GitHub's color palette</td></tr>
+     <tr><th>Privacy</th><td>100% private. Runs purely on local disk; no telemetry or tracking</td></tr>
+    </table>
+   </div>
+  </div>
+ </div>
+</div></section>
+
+<!-- Technical Architecture Section -->
+<section id="architecture"><div class="wrap rv">
+ <h2>Inside GetHub V3.0: Clean Architecture</h2>
+ <p class="lead">Built with a modular, maintainable C# architecture using Microsoft .NET Framework 4.8. Designed for maximum responsiveness, clean separation of concerns, and zero external bloat.</p>
+
+ <div class="arch-grid">
+  <div class="arch-card">
+   <h3>GetHub.Forms <span class="arch-tag">UI Layer</span></h3>
+   <div class="arch-sub">Main application windows &amp; dialogs</div>
+   <p>Hosts the main workspace shell, repository library split-view, add-repository dialog with URL validation, download progress monitoring, and settings management.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">MainForm</span>
+    <span class="arch-tag">AddRepoForm</span>
+    <span class="arch-tag">SettingsForm</span>
+    <span class="arch-tag">DownloadProgressForm</span>
+   </div>
+  </div>
+
+  <div class="arch-card">
+   <h3>GetHub.Controls <span class="arch-tag">Custom GDI+</span></h3>
+   <div class="arch-sub">Double-buffered high-performance controls</div>
+   <p>Custom WinForms controls painted with GDI+: reactive repository tab strip, visual commit branching graph, interactive diff viewer, repository cards, and responsive about panel.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">CommitGraphView</span>
+    <span class="arch-tag">CommitDiffView</span>
+    <span class="arch-tag">RepoTabStrip</span>
+    <span class="arch-tag">RepoAboutPanel</span>
+    <span class="arch-tag">RepoCard</span>
+   </div>
+  </div>
+
+  <div class="arch-card">
+   <h3>GetHub.Services <span class="arch-tag">Core Engine</span></h3>
+   <div class="arch-sub">Downloader, Git parser &amp; local store</div>
+   <p>Orchestrates GitHub REST API communication, zip stream downloading with deep path segment budgeting for MAX_PATH, native git history extraction, and commit caching.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">GitHubDownloader</span>
+    <span class="arch-tag">GitHistoryReader</span>
+    <span class="arch-tag">RepoStore</span>
+    <span class="arch-tag">CommitCache</span>
+   </div>
+  </div>
+
+  <div class="arch-card">
+   <h3>GetHub.Rendering <span class="arch-tag">HTML &amp; Markdown</span></h3>
+   <div class="arch-sub">Offline document compiler</div>
+   <p>Compiles local code and documentation into sanitized HTML pages: GitHub-Flavored Markdown parser, multi-language syntax highlighter, and relative path resolver for images and links.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">MarkdownRenderer</span>
+    <span class="arch-tag">SyntaxHighlighter</span>
+    <span class="arch-tag">HtmlSanitizer</span>
+    <span class="arch-tag">SiteBuilder</span>
+   </div>
+  </div>
+
+  <div class="arch-card">
+   <h3>GetHub.Models <span class="arch-tag">Data Models</span></h3>
+   <div class="arch-sub">Strongly-typed entity models</div>
+   <p>Encapsulates repository records, commit information, diff details, file modifications, releases, contributors, and user application settings.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">RepoRecord</span>
+    <span class="arch-tag">CommitInfo</span>
+    <span class="arch-tag">CommitDetail</span>
+    <span class="arch-tag">ReleaseInfo</span>
+    <span class="arch-tag">AppSettings</span>
+   </div>
+  </div>
+
+  <div class="arch-card">
+   <h3>GetHub.Utilities <span class="arch-tag">Foundation</span></h3>
+   <div class="arch-sub">Design tokens, assets &amp; filesystem helpers</div>
+   <p>Provides centralized color palettes for dark and light themes, embedded icon and logo asset management, DPI-aware display helpers, and resilient filesystem operations.</p>
+   <div class="arch-tags">
+    <span class="arch-tag">UiTheme</span>
+    <span class="arch-tag">AppAssets</span>
+    <span class="arch-tag">Display</span>
+    <span class="arch-tag">FileUtil</span>
+   </div>
+  </div>
+ </div>
+
+ <h3 class="sub">Technical Specifications</h3>
+ <div class="spec-grid">
+  <div class="spec-box"><div class="spec-label">Target Operating System</div><div class="spec-val">Windows 10 / 11 (x64 &amp; x86)</div></div>
+  <div class="spec-box"><div class="spec-label">Target Runtime</div><div class="spec-val">.NET Framework 4.8</div></div>
+  <div class="spec-box"><div class="spec-label">Binary Size</div><div class="spec-val">~690 KB (Single .exe)</div></div>
+  <div class="spec-box"><div class="spec-label">UI Framework</div><div class="spec-val">Double-Buffered WinForms</div></div>
+  <div class="spec-box"><div class="spec-label">External Dependencies</div><div class="spec-val">Zero (Native .NET assemblies)</div></div>
+  <div class="spec-box"><div class="spec-label">Repository Storage</div><div class="spec-val">%LocalAppData%\GetHub</div></div>
+ </div>
+</div></section>
+
+<!-- Comparison Section -->
+<section id="compare"><div class="wrap rv">
+ <h2>Why Use GetHub?</h2>
+ <p class="lead">Compare GetHub against standard web browsing, heavy Git desktop clients, and raw archive extraction.</p>
+
+ <div class="comp-table-wrap">
+  <table class="comp-table">
+   <thead>
+    <tr>
+     <th scope="col">Capability</th>
+     <th scope="col" class="hl">GetHub V3.0</th>
+     <th scope="col">GitHub.com Web</th>
+     <th scope="col">Heavy Git Desktop Clients</th>
+     <th scope="col">File Explorer &amp; Zip</th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <th scope="row">100% Offline Availability</th>
+     <td class="hl"><span class="chk">✓</span> Full snapshot</td>
+     <td><span class="crs">✗</span> Requires internet</td>
+     <td><span class="par">~</span> Commits only</td>
+     <td><span class="chk">✓</span> Unformatted files</td>
+    </tr>
+    <tr>
+     <th scope="row">GitHub-Fidelity UI &amp; Navigation</th>
+     <td class="hl"><span class="chk">✓</span> Full GitHub views</td>
+     <td><span class="chk">✓</span> Web only</td>
+     <td><span class="crs">✗</span> Custom GUI layout</td>
+     <td><span class="crs">✗</span> Plain folder view</td>
+    </tr>
+    <tr>
+     <th scope="row">Visual Commit Graph &amp; Diff Engine</th>
+     <td class="hl"><span class="chk">✓</span> Built-in GDI+</td>
+     <td><span class="crs">✗</span> Web only</td>
+     <td><span class="chk">✓</span> Included</td>
+     <td><span class="crs">✗</span> None</td>
+    </tr>
+    <tr>
+     <th scope="row">Rendered Markdown READMEs</th>
+     <td class="hl"><span class="chk">✓</span> Built-in GFM</td>
+     <td><span class="chk">✓</span> Web only</td>
+     <td><span class="crs">✗</span> Raw markdown</td>
+     <td><span class="crs">✗</span> Plain text</td>
+    </tr>
+    <tr>
+     <th scope="row">Resource Footprint</th>
+     <td class="hl"><span class="chk">✓</span> ~40 MB RAM (C#)</td>
+     <td><span class="par">~</span> 200 MB+ browser tab</td>
+     <td><span class="crs">✗</span> 400 MB+ (Electron)</td>
+     <td><span class="chk">✓</span> Minimal</td>
+    </tr>
+    <tr>
+     <th scope="row">Deep Windows MAX_PATH Handling</th>
+     <td class="hl"><span class="chk">✓</span> Segment budgeting</td>
+     <td><span class="chk">✓</span> N/A</td>
+     <td><span class="par">~</span> Needs git config</td>
+     <td><span class="crs">✗</span> Path too long errors</td>
+    </tr>
+    <tr>
+     <th scope="row">Private Repositories via PAT</th>
+     <td class="hl"><span class="chk">✓</span> Secure local token</td>
+     <td><span class="chk">✓</span> Web login</td>
+     <td><span class="chk">✓</span> SSH / OAuth</td>
+     <td><span class="crs">✗</span> Manual browser zip</td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+
+ <h3 class="sub">Keyboard Shortcuts for Power Users</h3>
+ <div class="keys-grid">
+  <div class="key-item"><span>Add new repository</span><kbd>Ctrl</kbd> + <kbd>N</kbd></div>
+  <div class="key-item"><span>Search &amp; filter library</span><kbd>Ctrl</kbd> + <kbd>F</kbd></div>
+  <div class="key-item"><span>Sync active repository</span><kbd>Ctrl</kbd> + <kbd>R</kbd></div>
+  <div class="key-item"><span>Open Settings</span><kbd>Ctrl</kbd> + <kbd>,</kbd></div>
+  <div class="key-item"><span>Navigate commits / tree</span><kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd></div>
+  <div class="key-item"><span>Quick close / dismiss</span><kbd>Esc</kbd></div>
+ </div>
+</div></section>
+
+<!-- Getting Started & Build Guide -->
+<section id="start"><div class="wrap rv">
+ <h2>Get Started in Minutes</h2>
+ <p class="lead">Download the standalone executable or compile it directly from source.</p>
+
+ <ol class="steps">
+  <li>
+   <h3>Download or Build</h3>
+   <p>Get the standalone executable <a href="GetHub.exe" download="GetHub.exe">GetHub.exe</a> or build from source using the PowerShell script.</p>
+  </li>
+  <li>
+   <h3>Add a Repository</h3>
+   <p>Enter any GitHub URL (e.g. <code>owner/repo</code>), or drag and drop an existing local Git directory into the window.</p>
+  </li>
+  <li>
+   <h3>Browse Offline</h3>
+   <p>Inspect source files, switch branches, review commit history, and examine diffs without an internet connection.</p>
+  </li>
+ </ol>
+
+ <h3 class="sub">Build from Source</h3>
+ <div class="code-tabs" role="tablist">
+  <button class="code-tab-btn" role="tab" aria-selected="true" id="tabPs">PowerShell (build.ps1)</button>
+  <button class="code-tab-btn" role="tab" aria-selected="false" id="tabVs">MSBuild / Visual Studio</button>
+ </div>
+ <div class="code-box">
+  <button class="copy" id="copy" title="Copy command to clipboard">Copy</button>
+  <pre id="cmd"><span class="p"># 1. Clone or download the repository</span>
+git clone https://github.com/Abdelwahab-Ayman/GetHub.git
+cd GetHub
+
+<span class="p"># 2. Run the automated PowerShell build script (uses csc.exe)</span>
+.\build.ps1 -Configuration Release
+
+<span class="c"># Binary output: .\build\GetHub.exe</span></pre>
+ </div>
+
+ <h3 class="sub">System Requirements</h3>
+ <table>
+  <tr><th scope="row">Operating System</th><td>Windows 10 or Windows 11 (64-bit or 32-bit)</td></tr>
+  <tr><th scope="row">Runtime Required</th><td>Microsoft .NET Framework 4.8 (pre-installed on Windows 10/11)</td></tr>
+  <tr><th scope="row">To Build from Source</th><td>Windows PowerShell &amp; .NET 4.8 Framework tools or Visual Studio 2022</td></tr>
+  <tr><th scope="row">Local Clones</th><td>Any Git repository (Git installation optional for local <code>.git</code> parsing)</td></tr>
+ </table>
+</div></section>
+
+<!-- FAQ Section -->
+<section id="faq"><div class="wrap rv">
+ <h2>Frequently Asked Questions</h2>
+ <details>
+  <summary>Do I need an active internet connection to use GetHub?</summary>
+  <p>No. Once a repository is downloaded or dragged into GetHub, all its files, directories, Markdown READMEs, commit logs, and diffs are cached locally on your machine. You only need an internet connection when you choose to download or sync a repository.</p>
+ </details>
+ <details>
+  <summary>How does GetHub handle private GitHub repositories?</summary>
+  <p>You can browse private repositories by generating a GitHub Personal Access Token (classic or fine-grained with <code>repo</code> scope) and saving it in GetHub's <strong>Settings</strong> dialog. The token is stored securely in your local user app settings and gives you access to private repos as well as 5,000 GitHub API requests per hour instead of the unauthenticated limit of 60.</p>
+ </details>
+ <details>
+  <summary>How does GetHub solve the Windows 260-character path limit (MAX_PATH)?</summary>
+  <p>Deeply nested directories in modern codebases frequently exceed the legacy Windows 260-character limit. GetHub features an intelligent segment-budgeting algorithm in <code>GitHubDownloader.cs</code> that calculates path depth and shortens intermediate folder names dynamically, guaranteeing safe archive extraction without path length errors.</p>
+ </details>
+ <details>
+  <summary>Can I browse repositories cloned from GitLab, Bitbucket, or self-hosted servers?</summary>
+  <p>Yes. Drag and drop any folder containing a <code>.git</code> repository directory into GetHub. GetHub's native <code>GitHistoryReader</code> will parse commits, branches, and diffs directly from your local Git clone regardless of where it was hosted.</p>
+ </details>
+ <details>
+  <summary>Does GetHub modify my source code or Git history?</summary>
+  <p>Never. GetHub operates strictly as a read-only viewer. Downloaded snapshots are stored separately in your user data directory, and local clones opened in GetHub remain completely untouched.</p>
+ </details>
+ <details>
+  <summary>Where are downloaded repositories stored?</summary>
+  <p>All downloaded repositories, cached metadata (<code>repo.json</code>), commit caches, and unpacked files are stored neatly under <code>%LocalAppData%\GetHub\repos\&lt;owner&gt;\&lt;repo&gt;</code>. You can click the "Open Folder" button in GetHub anytime to inspect them in Windows Explorer.</p>
+ </details>
+ <details>
+  <summary>Is Git required to be installed on my PC?</summary>
+  <p>Git is not required for downloading and browsing repositories from GitHub. For reading commit history from local existing clones, GetHub uses the system <code>git</code> command if available, or falls back to its cached repository history.</p>
+ </details>
+</div></section>
+</main>
+
+<!-- Lightbox Modal for Showcase Image -->
+<div class="modal" id="lightbox" role="dialog" aria-modal="true" aria-label="High-resolution interface view">
+ <div class="modal-inner">
+  <button class="modal-close" id="modalClose" aria-label="Close zoom">&times;</button>
+  <img src="UI_design.jpg" alt="GetHub Desktop User Interface full preview">
+  <div class="modal-caption">GetHub V3.0 Desktop Client — Native C# WinForms Offline Interface (2752×1536)</div>
+ </div>
+</div>
+
+<footer><div class="wrap">
+ <div class="fgrid">
+  <div class="fbrand">
+   <img src="logo.jpg" alt="GetHub logo preview">
+   <p><strong>GetHub V3.0</strong> — Fast, native offline GitHub and Git repository browser for Windows.</p>
+   <p class="badge">100% Offline • Native C# • .NET 4.8</p>
+  </div>
+  <div>
+   <h3>About the Developer</h3>
+   <p class="who"><strong>Abdelwahab Ayman</strong></p>
+   <p>Software developer and server administrator with a passion for building lightweight, responsive, and reliable developer utilities that solve real-world connectivity limitations.</p>
+   <p class="links">
+    <a href="https://github.com/Abdelwahab-Ayman" target="_blank" rel="noopener">GitHub Profile</a>
+    <a href="GetHub.exe" download="GetHub.exe">Download GetHub.exe</a>
+   </p>
+  </div>
+  <div>
+   <h3>Quick Links</h3>
+   <ul>
+    <li><a href="#showcase">Application Interface</a></li>
+    <li><a href="#features">Core Features</a></li>
+    <li><a href="#architecture">Architecture &amp; Specs</a></li>
+    <li><a href="#compare">Comparison Matrix</a></li>
+    <li><a href="#start">Build Guide</a></li>
+    <li><a href="#faq">Frequently Asked Questions</a></li>
+   </ul>
+  </div>
+ </div>
+ <div class="fbot">
+  <span>© <span id="year">2026</span> GetHub by Abdelwahab Ayman. Designed for offline developers.</span>
+  <a href="#top">Back to top ↑</a>
+ </div>
+</div></footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
